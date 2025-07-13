@@ -6,18 +6,19 @@ def save_and_quit():
         f.write(text)
     root.destroy()
 
-# Set up GUI window
-root = tk.Tk()
-root.title("Enter Description")
+def start_gui():
+    # Set up GUI window
+    root = tk.Tk()
+    root.title("Enter Description")
 
-# Create and pack the widgets
-tk.Label(root, text="Enter your description:").pack(pady=(10, 0))
+    # Create and pack the widgets
+    tk.Label(root, text="Enter your description:").pack(pady=(10, 0))
 
-text_box = tk.Text(root, height=10, width=50)
-text_box.pack(padx=10, pady=10)
+    text_box = tk.Text(root, height=10, width=50)
+    text_box.pack(padx=10, pady=10)
 
-enter_button = tk.Button(root, text="Enter", command=save_and_quit)
-enter_button.pack(pady=(0, 10))
+    enter_button = tk.Button(root, text="Enter", command=save_and_quit)
+    enter_button.pack(pady=(0, 10))
 
-# Start the GUI loop
-root.mainloop()
+    # Start the GUI loop
+    root.mainloop()
