@@ -1,7 +1,7 @@
 import protocol
 import socket
-USER_IP = ""
-SEND_IP = ""
+USER_IP = "0.0.0.0"
+SEND_IP = "147.235.220.168"
 def listen(queue):
     #create socket
     listen_socket = socket.socket()
@@ -21,6 +21,7 @@ def send(input):
 
     packet = protocol.create_msg(input)  # create packet
     send_socket.send(packet) #send
+    send_socket.close()
 
 
 
