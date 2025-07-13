@@ -1,19 +1,17 @@
 import threading
 import queue
 from GUI import run_gui
-from network import listen
+#from network import listen
 
 
 def main():
     msg_queue = queue.Queue()
 
-    t1 = threading.Thread(target=run_gui, args=(msg_queue,))
-    t2 = threading.Thread(target=listen_network, args=(msg_queue,), daemon=True)
+    # Start network thread only
+  #  threading.Thread(target=listen_network, args=(msg_queue,), daemon=True).start()
 
-    t1.start()
-    t2.start()
-
-    t1.join()  # Wait for GUI to close
+    # GUI must run on main thread
+    run_gui(msg_queue)
 
 
 if __name__ == "__main__":

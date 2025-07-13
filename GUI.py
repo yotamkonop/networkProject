@@ -1,24 +1,37 @@
 import tkinter as tk
 
-def save_and_quit():
-    text = text_box.get("1.0", tk.END).strip()
-    with open("description.txt", "w", encoding="utf-8") as f:
-        f.write(text)
-    root.destroy()
+def run_gui(msg_queue=None, on_send=None):
+    def check_queue():
+        if msg_queue:
+            while not msg_queue.empty():
+                msg = msg_queue.get()
+                chat_box.insert(tk.END, msg + "\n")
+        root.after(100, check_queue)
 
-def start_gui():
-    # Set up GUI window
+    def send_message():
+        msg = entry.get()
+        if msg.strip() == "":
+            return
+        chat_box.insert(tk.END, f"You: {msg}\n")  # Add to message area
+        entry.delete(0, tk.END)                   # Clear input
+        if on_send:
+            on_send(msg)  # Call external function to send over socket
+
+    # --- GUI setup ---
     root = tk.Tk()
-    root.title("Enter Description")
+    root.title("Chat")
 
-    # Create and pack the widgets
-    tk.Label(root, text="Enter your description:").pack(pady=(10, 0))
+    # Chat history box (top section)
+    chat_box = tk.Text(root, height=20, width=50)
+    chat_box.pack(padx=10, pady=5)
 
-    text_box = tk.Text(root, height=10, width=50)
-    text_box.pack(padx=10, pady=10)
+    # Bottom section: entry + send button
+    bottom_frame = tk.Frame(root)
+    entry = tk.Entry(bottom_frame, width=40)
+    entry.pack(side=tk.LEFT, padx=5)
+    send_btn = tk.Button(bottom_frame, text="Send", command=send_message)
+    send_btn.pack(side=tk.LEFT)
+    bottom_frame.pack(pady=5)
 
-    enter_button = tk.Button(root, text="Enter", command=save_and_quit)
-    enter_button.pack(pady=(0, 10))
-
-    # Start the GUI loop
+    check_queue()  # Start polling for messages
     root.mainloop()
